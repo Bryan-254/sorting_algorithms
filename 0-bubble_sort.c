@@ -34,14 +34,10 @@ void bubble_sort(int *array, size_t size)
 			{
 				swap_bubble(&array[j], &array[j + 1]);
 				swapped = 1;
-				/*Print array after each swap*/
 				print_array(array, size);
 			}
 		}
-		/**
-		 * If no 2 elements were swapped by inner loop,
-		 * the array is sorted
-		 */
+
 		if (!swapped)
 			break;
 	}
