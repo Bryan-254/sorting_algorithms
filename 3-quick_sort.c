@@ -8,19 +8,6 @@ int lomuto_partition(int *array, int low, int high, size_t size);
 void swap(int *a, int *b);
 
 /**
- * quick_sort - Sorts an array of integers using the Quick sort algorithm
- * @array: The array to be sorted
- * @size: Number of elements in the array
- */
-void quick_sort(int *array, size_t size)
-{
-	if (array == NULL || size < 2)
-		return;
-
-	_quick_sort(array, 0, size - 1, size);
-}
-
-/**
  * _quick_sort - Helper function for quick_sort
  * @array: The array to be sorted
  * @low: Starting index of the partition
@@ -37,6 +24,19 @@ void _quick_sort(int *array, int low, int high, size_t size)
 		_quick_sort(array, low, pivot_idx - 1, size);
 		_quick_sort(array, pivot_idx + 1, high, size);
 	}
+}
+
+/**
+ * quick_sort - Sorts an array of integers using the Quick sort algorithm
+ * @array: The array to be sorted
+ * @size: Number of elements in the array
+ */
+void quick_sort(int *array, size_t size)
+{
+	if (array == NULL || size < 2)
+		return;
+
+	_quick_sort(array, 0, size - 1, size);
 }
 
 /**
