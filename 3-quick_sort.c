@@ -1,83 +1,80 @@
 #include "sort.h"
-#include <stdlib.h>
-#include <stdio.h>
-
-void quick_sort(int *array, size_t size);
-void _quick_sort(int *array, int low, int high, size_t size);
-int lomuto_partition(int *array, int low, int high, size_t size);
-void swap(int *a, int *b);
-
 /**
- * _quick_sort - Helper function for quick_sort
- * @array: The array to be sorted
- * @low: Starting index of the partition
- * @high: Ending index of the partition
- * @size: Number of elements in the array
+ * swap_bubble - function to swap/sort.
+ * @a: to be sorted.
+ * @b: to be sorted.
+ * Return: void.
  */
-void _quick_sort(int *array, int low, int high, size_t size)
+void swap_bubble(int *a, int *b)
 {
-	int pivot_idx;
+	int temp;
 
-	if (low < high)
-	{
-		pivot_idx = lomuto_partition(array, low, high, size);
-		_quick_sort(array, low, pivot_idx - 1, size);
-		_quick_sort(array, pivot_idx + 1, high, size);
-	}
+	temp = *a;
+	*a = *b;
+	*b = temp;
 }
 
 /**
- * quick_sort - Sorts an array of integers using the Quick sort algorithm
- * @array: The array to be sorted
- * @size: Number of elements in the array
+ * partition - function to sort using Lomuto scheme.
+ * @array: array to be sorted.
+ * @size: size of array.
+ * @low: divider/partition.
+ * @high: divider/partition.
+ * Return: partition.
  */
-void quick_sort(int *array, size_t size)
+int partition(int *array, size_t size, int low, int high)
 {
-	if (array == NULL || size < 2)
-		return;
+	int *pivot, high1, low1;
 
-	_quick_sort(array, 0, size - 1, size);
-}
-
-/**
- * lomuto_partition - Lomuto partition scheme for quick_sort
- * @array: The array to be partitioned
- * @low: Starting index of the partition
- * @high: Ending index of the partition
- * @size: Number of elements in the array
- * Return: Index of the pivot element after partition
- */
-int lomuto_partition(int *array, int low, int high, size_t size)
-{
-	int pivot = array[high];
-	int i = low - 1;
-	int j;
-
-	for (j = low; j <= high - 1; j++)
+	pivot = array + high;
+	for (high1 = low1 = low; low1 < high; low1++)
 	{
-		if (array[j] < pivot)
+		if (array[low1] < *pivot)
 		{
-			i++;
-			swap(&array[i], &array[j]);
-			print_array(array, size);
+			if (high1 < low1)
+			{
+				swap_bubble(array + low1, array + high1);
+				print_array(array, size);
+			}
+			high1++;
 		}
 	}
 
-	swap(&array[i + 1], &array[high]);
-	print_array(array, size);
-
-	return (i + 1);
+	if (array[high1] > *pivot)
+	{
+		swap_bubble(array + high1, pivot);
+		print_array(array, size);
+	}
+	return (high1);
 }
 
 /**
- * swap - Swaps two elements in an array
- * @a: Pointer to the first element
- * @b: Pointer to the second element
+ * partition_sort - recursion function to call partition sort
+ * @array: array to be sorted.
+ * @size: size of array.
+ * @low: partition divider.
+ * @high: partition divider.
+ * Return: void.
  */
-void swap(int *a, int *b)
+void partition_sort(int *array, size_t size, int low, int high)
 {
-	int temp = *a;
+	int part;
 
-	*a = *b;
-	*b = temp;
+	if (high - low > 0)
+	{
+		part = partition(array, size, low, high);
+		partition_sort(array, size, low, part - 1);
+		partition_sort(array, size, part + 1, high);
+	}
+}
+
+/**
+ * quick_sort - quick sort function for array.
+ * @array: array to be sorted.
+ * @size: size to be sorted.
+ * Return: void.
+ */
+void quick_sort(int *array, size_t size)
+{
+	partition_sort(array, size, 0, size - 1);
 }
